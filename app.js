@@ -208,6 +208,14 @@ function lockMaintenanceMode() {
   sessionStorage.removeItem('mozzaro_preview_unlocked');
 }
 
+function toggleDetailsModal(show) {
+  const modal = document.getElementById('detailsModal');
+  if (modal) {
+    modal.style.display = show ? 'flex' : 'none';
+    document.body.style.overflow = show ? 'hidden' : '';
+  }
+}
+
 // 1. Header Scroll Effect & Scrollspy
 function initNavbarScroll() {
   const header = document.getElementById('header');

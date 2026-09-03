@@ -1,0 +1,41 @@
+[
+  {
+    "id": "ORD-101",
+    "clientName": "Constanza Silva",
+    "phone": "+56987654321",
+    "email": "constanza@gmail.com",
+    "deliveryDate": "2026-08-19",
+    "deliveryTime": "18:30",
+    "address": "Av. Las Condes 9800, Depto 402",
+    "details": "2x Caja Canapés Gourmet Salados, 1x Tabla Charcutería XL",
+    "total": 109000,
+    "status": "En Preparación",
+    "createdAt": "2026-08-19T06:19:20.837Z"
+  },
+  {
+    "id": "ORD-102",
+    "clientName": "Empresas Horizon",
+    "phone": "+56911223344",
+    "email": "contacto@horizon.cl",
+    "deliveryDate": "2026-08-20",
+    "deliveryTime": "13:00",
+    "address": "Oficina Central, Providencia #1500",
+    "details": "1x Combo Cóctel Corporativo (20 pers)",
+    "total": 135000,
+    "status": "Pendiente",
+    "createdAt": "2026-08-19T06:19:20.837Z"
+  },
+  {
+    "id": "ORD-103",
+    "clientName": "Felipe M. (Boda VIP)",
+    "phone": "+56955667788",
+    "email": "felipe.boda@outlook.com",
+    "deliveryDate": "2026-08-24",
+    "deliveryTime": "20:00",
+    "address": "Centro de Eventos La Dehesa",
+    "details": "1x Combo Gran Gala Mozzaro (50 pers)",
+    "total": 320000,
+    "status": "Pendiente",
+    "createdAt": "2026-08-19T06:19:20.837Z"
+  }
+]

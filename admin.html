@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mozzaro Admin | Gestor de Pedidos & Notificaciones Móviles</title>
+  <meta name="description" content="Aplicación independiente de administración y gestión de pedidos para Mozzaro Catering">
+  
+  <!-- PWA Web App Manifest & Mobile Tags -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/jpeg" href="assets/logo_mozzaro.jpeg">
+  <link rel="apple-touch-icon" href="assets/logo_mozzaro.jpeg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#090B0E">
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Admin Stylesheet -->
+  <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="app-header-container">
+      <div class="brand">
+        <img src="assets/logo_mozzaro.jpeg" alt="Mozzaro Logo" class="brand-logo">
+        <div>
+          <h1 class="brand-title">MOZZARO ADMIN</h1>
+          <span class="brand-sub">Gestión de Pedidos & Notificaciones</span>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <button class="btn btn-gold btn-sm hide-desktop" id="installPwaBtn" onclick="installAppPWA()" style="display: none;">
+          <i class="fa-solid fa-mobile-screen-button"></i> Instalar App
+        </button>
+        <span class="status-indicator" id="apiStatusIndicator"><i class="fa-solid fa-circle text-success"></i> API Conectada</span>
+        <button class="btn-refresh" onclick="fetchOrdersFromAPI()" title="Actualizar Datos">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="app-container">
+
+      <!-- PWA Mobile Install Banner -->
+      <div class="notif-card pwa-install-banner" id="pwaInstallCard" style="display: none;">
+        <div class="notif-info">
+          <div class="notif-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+          <div>
+            <strong>Instala Mozzaro Admin como App en tu Celular</strong>
+            <p>Accede directamente desde tu pantalla de inicio como una aplicación nativa sin barra de navegador.</p>
+          </div>
+        </div>
+        <button class="btn btn-gold btn-sm" id="btnInstallApp" onclick="installAppPWA()">
+          <i class="fa-solid fa-download"></i> Instalar App en Celular
+        </button>
+      </div>
+
+      <!-- Push Notification Banner -->
+      <div class="notif-card" id="notifCard">
+        <div class="notif-info">
+          <div class="notif-icon"><i class="fa-solid fa-bell-ring"></i></div>
+          <div>
+            <strong>Activar y Probar Notificaciones Móviles</strong>
+            <p>Recibe alertas en la pantalla de tu teléfono cuando se registre una cotización o llegue la hora de entregar un pedido.</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+          <button class="btn btn-gold btn-sm" onclick="requestPushNotifications()">
+            <i class="fa-solid fa-bell"></i> Activar Notificaciones
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="sendTestNotification()">
+            <i class="fa-solid fa-paper-plane"></i> 🔔 Probar Notificación Ahora
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-value" id="statTotal">0</span>
+          <span class="stat-label">Pedidos Totales</span>
+        </div>
+        <div class="stat-card stat-urgent">
+          <span class="stat-value" id="statToday">0</span>
+          <span class="stat-label">Entregas Hoy 🚨</span>
+        </div>
+        <div class="stat-card stat-pending">
+          <span class="stat-value" id="statPending">0</span>
+          <span class="stat-label">En Preparación</span>
+        </div>
+        <div class="stat-card stat-revenue">
+          <span class="stat-value" id="statRevenue">$0</span>
+          <span class="stat-label">Total en Pedidos</span>
+        </div>
+      </div>
+
+      <!-- Action & Filter Bar -->
+      <div class="controls-bar">
+        <button class="btn btn-gold" onclick="toggleOrderFormModal()">
+          <i class="fa-solid fa-plus"></i> Nuevo Pedido Manual
+        </button>
+        <div class="filter-pills">
+          <button class="pill-btn active" data-filter="all" onclick="applyFilter('all')">Todos</button>
+          <button class="pill-btn" data-filter="today" onclick="applyFilter('today')">Entregas Hoy</button>
+          <button class="pill-btn" data-filter="pending" onclick="applyFilter('pending')">Pendientes</button>
+        </div>
+      </div>
+
+      <!-- Order List Grid / Cards Container -->
+      <div class="orders-grid" id="ordersGrid">
+        <div class="loading-spinner">
+          <i class="fa-solid fa-spinner fa-spin"></i> Cargando pedidos desde la API...
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Modal: Crear Nuevo Pedido -->
+  <div class="modal-overlay" id="orderModalOverlay"></div>
+  <div class="modal-card" id="orderModal">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-box-archive text-gold"></i> Registrar Nuevo Pedido</h3>
+      <button class="modal-close" onclick="toggleOrderFormModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="createOrderForm" onsubmit="submitNewOrder(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre del Cliente *</label>
+          <input type="text" id="inputClientName" class="form-control" placeholder="Ej: Marcela López" required>
+        </div>
+        <div class="form-group">
+          <label>Teléfono / WhatsApp *</label>
+          <input type="tel" id="inputPhone" class="form-control" placeholder="+56 9 1234 5678" required>
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="inputEmail" class="form-control" placeholder="cliente@correo.com">
+        </div>
+        <div class="form-group">
+          <label>Fecha de Entrega *</label>
+          <input type="date" id="inputDate" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Hora de Entrega *</label>
+          <input type="time" id="inputTime" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Monto Total ($ CLP)</label>
+          <input type="number" id="inputTotal" class="form-control" placeholder="Ej: 145000">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Dirección de Entrega / Comuna</label>
+        <input type="text" id="inputAddress" class="form-control" placeholder="Ej. Av. Vitacura 4500, Depto 102">
+      </div>
+
+      <div class="form-group">
+        <label>Detalle del Pedido / Bocaditos *</label>
+        <textarea id="inputDetails" class="form-control" rows="3" placeholder="Ej: 2x Empanadas de Pino (100 u), 1x Mini Hamburguesas (50 u)" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Estado Inicial</label>
+        <select id="inputStatus" class="form-control">
+          <option value="Pendiente">Pendiente</option>
+          <option value="En Preparación">En Preparación</option>
+          <option value="Listo para Entrega">Listo para Entrega</option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="toggleOrderFormModal()">Cancelar</button>
+        <button type="submit" class="btn btn-gold"><i class="fa-solid fa-floppy-disk"></i> Guardar en API</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal: Bloqueo por PIN de Seguridad -->
+  <div class="pin-modal-backdrop" id="pinAuthOverlay" style="display: flex;">
+    <div class="pin-modal-card" style="background: rgba(18, 22, 30, 0.95); backdrop-filter: blur(16px); border: 1px solid var(--border-gold); padding: 2.5rem 2rem; border-radius: 16px; text-align: center; max-width: 380px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.8); margin: auto;">
+      <div class="pin-icon-wrap" style="width: 60px; height: 60px; border-radius: 50%; background: rgba(230,194,128,0.15); color: var(--primary-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; border: 1px solid var(--primary-gold);">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: #ffffff;">Acceso Protegido por PIN</h2>
+      <p style="font-size: 0.85rem; color: #a0a5b1; margin-bottom: 1.5rem;">Ingresa tu código PIN de 4 dígitos para ver los pedidos y finanzas:</p>
+      
+      <form onsubmit="verifyAdminPin(event)">
+        <div class="pin-input-group">
+          <input type="password" id="adminPinInput" maxlength="6" pattern="[0-9]*" inputmode="numeric" placeholder="• • • •" required autofocus style="width: 100%; font-size: 1.8rem; letter-spacing: 0.5rem; text-align: center; padding: 0.75rem; border-radius: 10px; border: 1px solid var(--border-gold); background: rgba(0,0,0,0.4); color: var(--primary-gold); outline: none;">
+        </div>
+        <div id="pinErrorMessage" class="pin-error-text" style="display: none; color: #e07a5f; font-size: 0.85rem; margin-top: 0.75rem; font-weight: 600;">
+          <i class="fa-solid fa-triangle-exclamation"></i> PIN Incorrecto. Inténtalo de nuevo.
+        </div>
+        <button type="submit" class="btn btn-gold" style="margin-top: 1.25rem; width: 100%; font-weight: 700; padding: 0.85rem;">
+          <i class="fa-solid fa-key"></i> Desbloquear Panel Admin
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Application Logic -->
+  <script src="admin-app.js"></script>
+</body>
+</html>

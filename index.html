@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Favicon / Logo de Pestaña -->
+  <link rel="icon" type="image/jpeg" href="assets/logo_mozzaro.jpeg">
+  <link rel="apple-touch-icon" href="assets/logo_mozzaro.jpeg">
+
+  <!-- OpenGraph Tags -->
+  <meta property="og:title" content="Mozzaro | Bocaditos & Comida para Eventos">
+  <meta property="og:description" content="Disfruta tus celebraciones con deliciosos bocaditos salados, galletas temáticas y mini dulces listos para consumir. Cotiza online.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/hero_catering.jpg">
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Barra Superior de Notificación Modo Previsualización (Solo visible al desbloquear) -->
+  <div id="previewBanner" style="display: none; background: linear-gradient(90deg, #131722 0%, #1c2232 50%, #131722 100%); border-bottom: 1.5px solid var(--border-gold); padding: 0.5rem 1rem; text-align: center; font-size: 0.82rem; color: var(--primary-gold); z-index: 10001; position: sticky; top: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+    <div style="display: inline-flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; justify-content: center;">
+      <span><i class="fa-solid fa-eye text-gold"></i> <strong>Modo Vista Previa Activo</strong> (Vista de Administración)</span>
+      <button onclick="lockMaintenanceMode()" style="background: rgba(230, 194, 128, 0.15); border: 1px solid var(--border-gold); color: #ffffff; padding: 0.2rem 0.75rem; border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s ease;">
+        <i class="fa-solid fa-lock"></i> Volver a Pantalla "En Construcción"
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay Fullscreen: Sitio en Construcción (Vista Pública) -->
+  <div id="constructionOverlay" style="position: fixed; inset: 0; z-index: 99999; background: #0B0D11; display: flex; align-items: center; justify-content: center; padding: 1.5rem; overflow-y: auto;">
+    <div style="position: fixed; inset: 0; background: radial-gradient(circle at 50% 30%, rgba(230, 194, 128, 0.2) 0%, rgba(14, 18, 27, 0.9) 45%, #0B0D11 90%), url('assets/hero_catering.jpg') center/cover no-repeat; opacity: 0.85; pointer-events: none;"></div>
+
+    <div style="position: relative; z-index: 2; max-width: 820px; width: 100%; padding: 3.5rem 2rem; background: rgba(19, 23, 34, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid rgba(230, 194, 128, 0.4); border-radius: 24px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(230, 194, 128, 0.15); margin: auto;">
+      
+      <!-- Top Glowing Line -->
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 3.5px; background: linear-gradient(90deg, transparent 0%, #E6C280 50%, transparent 100%); border-radius: 24px 24px 0 0;"></div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <img src="assets/logo_mozzaro.jpeg" alt="Mozzaro Catering" onclick="handleLogoClick()" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #E6C280; box-shadow: 0 0 30px rgba(230, 194, 128, 0.45); cursor: pointer;" title="Mozzaro Catering">
+      </div>
+
+      <div style="display: inline-flex; align-items: center; gap: 0.6rem; background: linear-gradient(135deg, rgba(230, 194, 128, 0.2), rgba(184, 147, 74, 0.1)); border: 1px solid rgba(230, 194, 128, 0.4); color: #E6C280; padding: 0.5rem 1.4rem; border-radius: 50px; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1.25rem;">
+        <i class="fa-solid fa-screwdriver-wrench text-gold"></i> Sitio en Construcción • Próximamente
+      </div>
+
+      <h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 1rem; color: #FFFFFF; line-height: 1.15;">
+        Estamos Preparando Algo Especial para Ti
+      </h1>
+
+      <p style="font-size: 1.05rem; color: #9CA3AF; max-width: 640px; margin: 0 auto 2.2rem auto; line-height: 1.6;">
+        Estamos preparando nuestra nueva plataforma web para brindarte la mejor experiencia gastronómica en bocaditos gourmet y cócteles para tus celebraciones.
+      </p>
+
+      <!-- Progress bar -->
+      <div style="background: rgba(255, 255, 255, 0.08); border-radius: 20px; height: 10px; max-width: 420px; margin: 0 auto 2rem auto; overflow: hidden; border: 1px solid rgba(230, 194, 128, 0.25);">
+        <div style="height: 100%; width: 90%; background: linear-gradient(90deg, #B8934A 0%, #E6C280 50%, #F3D69E 100%); border-radius: 20px; box-shadow: 0 0 12px rgba(230, 194, 128, 0.8);"></div>
+      </div>
+      <div style="font-size: 0.85rem; color: #E6C280; margin-top: -1.4rem; margin-bottom: 2.2rem; font-weight: 700; letter-spacing: 1px;">
+        <i class="fa-solid fa-sparkles text-gold"></i> Apertura Próximamente
+      </div>
+
+      <div style="display: flex; justify-content: center;">
+        <a href="https://wa.me/56912345678?text=Hola%20Mozzaro,%20quisiera%20consultar%20disponibilidad%20y%20cotizar%20un%20pedido" target="_blank" class="btn btn-gold" style="padding: 0.9rem 2.2rem; text-decoration: none; font-size: 1.02rem;">
+          <i class="fa-brands fa-whatsapp" style="font-size: 1.25rem;"></i> Cotizar por WhatsApp Directo
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="header" id="header">
+    <div class="container nav-wrapper">
+      <div class="logo" style="cursor: default; user-select: none;">
+        <img src="assets/logo_mozzaro.jpeg" alt="Mozzaro Logo" class="logo-img">
+        <div class="logo-text">
+          <span class="logo-name">MOZZARO</span>
+          <span class="logo-sub">Bocaditos & Cóctel</span>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+        <li><a href="#menu" class="nav-link">Menú de Bocaditos</a></li>
+        <li><a href="#galletas" class="nav-link">Galletas Temáticas</a></li>
+        <li><a href="#propuesta" class="nav-link">Nosotros</a></li>
+        <li><a href="#galeria" class="nav-link">Nuestros Productos</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="mobile-toggle" id="mobileMenuToggle" aria-label="Abrir Menú">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <section class="hero" id="inicio">
+    <video class="hero-bg-video" autoplay loop muted playsinline webkit-playsinline poster="assets/hero_catering.jpg">
+      <source src="assets/hero_video.mp4" type="video/mp4">
+      Tu navegador no soporta la reproducción de video.
+    </video>
+    
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <span class="hero-pill">
+            <i class="fa-solid fa-box-open"></i> Venta Directa de Bocaditos & Comida para Cóctel
+          </span>
+          <h1 class="hero-title">
+            Comida para tus reuniones: <span class="text-gold">bocaditos salados & dulces listos para consumir.</span>
+          </h1>
+          <p class="hero-description">
+            En Mozzaro preparamos y vendemos deliciosos bocaditos salados, y tentaciones dulces. Te entregamos la comida en cajas lista para abrir y compartir en tus reuniones y celebraciones.
+          </p>
+          <div class="hero-cta-group">
+            <a href="https://wa.me/56912345678?text=Hola%20Mozzaro,%20quisiera%20cotizar%20un%20pedido%20de%20bocaditos" target="_blank" class="btn btn-gold">
+              <i class="fa-brands fa-whatsapp"></i> Cotizar por WhatsApp
+            </a>
+            <a href="#menu" class="btn btn-outline">
+              <i class="fa-solid fa-utensils"></i> Ver Catálogo de Bocaditos
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Comida Fresca</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">Listos</span>
+              <span class="stat-label">Para Servir</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">⭐ 4.9/5</span>
+              <span class="stat-label">Valoración clientes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card-preview">
+          <div class="hero-card-header">
+            <div class="hero-card-icon">
+              <i class="fa-solid fa-box-open"></i>
+            </div>
+            <div>
+              <h3 class="hero-card-title">Cajas Gourmet Mozzaro</h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Comida lista para consumir</span>
+            </div>
+          </div>
+          <ul class="hero-card-list">
+            <li class="hero-card-item">
+              <i class="fa-solid fa-circle-check"></i> Empanadas de queso y pino cóctel
+            </li>
+            <li class="hero-card-item">
+              <i class="fa-solid fa-circle-check"></i> Mini hamburguesas brioche & tapaditos de pollo
+            </li>
+            <li class="hero-card-item">
+              <i class="fa-solid fa-circle-check"></i> Mini chaparritas & mini sopaipillas crujientes
+            </li>
+            <li class="hero-card-item">
+              <i class="fa-solid fa-circle-check"></i> Variedad de bocaditos y cóctel dulce
+            </li>
+          </ul>
+          <div style="margin-top: 1.5rem; text-align: center; display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="#menu" class="btn btn-outline" style="width: 100%;">
+              Ver Productos
+            </a>
+            <a href="#video-presentacion" class="btn btn-gold btn-sm" style="width: 100%; text-decoration: none;">
+              <i class="fa-solid fa-circle-play"></i> Ver Video de Presentación
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECCIÓN VIDEO DE PRESENTACIÓN / EXPERIENCIA MOZZARO
+       ========================================================================== -->
+  <section class="video-showcase-section" id="video-presentacion" style="padding: 4.5rem 0 5.5rem 0; background: linear-gradient(180deg, rgba(14, 18, 27, 0.95) 0%, #0e121b 100%); border-bottom: 1px solid var(--border-light);">
+    <div class="container">
+      <div class="section-title-wrapper" style="text-align: center; max-width: 800px; margin: 0 auto 2.5rem auto;">
+        <span class="section-subtitle" style="color: var(--primary-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;">
+          <i class="fa-solid fa-film"></i> Video de Presentación Oficial
+        </span>
+        <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 2.6rem); margin: 0.5rem 0 1rem 0;">Conoce la Experiencia Mozzaro</h2>
+        <p class="section-desc" style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;">
+          Descubre cómo preparamos y presentamos nuestros bocaditos frescos, listos para sorprender a tus invitados en cualquier celebración.
+        </p>
+      </div>
+
+      <div style="max-width: 1140px; margin: 0 auto; background: #000; border: 1.5px solid var(--border-gold); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.7); position: relative;">
+        <!-- Glowing Gold Edge Top -->
+        <div style="height: 3px; background: linear-gradient(90deg, transparent 0%, var(--primary-gold) 50%, transparent 100%);"></div>
+
+        <div style="position: relative; width: 100%; background: #000; text-align: center; overflow: hidden;">
+          <video src="assets/video_mozzaro.mp4" controls autoplay muted loop playsinline style="width: 100%; max-height: 680px; aspect-ratio: 16/9; object-fit: contain; background: #000; display: block;" poster="assets/hero_catering.jpg"></video>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CATALOG & MENU SECTION
+       ========================================================================== -->
+  <section class="menu-section" id="menu">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Catálogo de Productos</span>
+        <h2 class="section-title">Explora Nuestros Bocaditos & Dulces</h2>
+        <p class="section-desc">Productos preparados frescos el día de la entrega con insumos de primera calidad.</p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="category-tabs">
+        <button class="tab-btn active" data-category="all">Todos los Productos</button>
+        <button class="tab-btn" data-category="salados">Cóctel Salado</button>
+        <button class="tab-btn" data-category="dulces">Cóctel Dulce</button>
+      </div>
+
+      <!-- Dynamic Menu Grid -->
+      <div class="menu-grid" id="menuGrid">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECCIÓN DE PEDIDO PERSONALIZADO / A LA MEDIDA
+       ========================================================================== -->
+  <section class="custom-request-section" style="padding: 3.5rem 0 5.5rem 0;">
+    <div class="container">
+      <div class="custom-request-card" style="background: linear-gradient(135deg, rgba(14, 18, 27, 0.88) 0%, rgba(22, 28, 42, 0.92) 100%), url('assets/hero_catering.jpg') center/cover no-repeat; backdrop-filter: blur(16px); border: 1.5px solid var(--border-gold); border-radius: var(--radius-lg); padding: 4rem 2rem; text-align: center; max-width: 960px; margin: 0 auto; box-shadow: 0 12px 40px rgba(0,0,0,0.6); position: relative; overflow: hidden;">
+        
+        <!-- Destello brillante dorado superior -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent 0%, var(--primary-gold) 50%, transparent 100%);"></div>
+
+        <div style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, rgba(230, 194, 128, 0.25), rgba(184, 147, 74, 0.15)); border: 1.5px solid var(--border-gold); color: var(--primary-gold); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 1.5rem auto; box-shadow: 0 6px 25px rgba(230, 194, 128, 0.3);">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <span class="section-subtitle" style="font-size: 0.85rem; margin-bottom: 0.5rem; letter-spacing: 1.5px; text-transform: uppercase;">Pedidos Especiales & A la Medida</span>
+        <h2 style="font-size: clamp(2rem, 4vw, 2.7rem); margin-bottom: 0.85rem; color: #ffffff; text-shadow: 0 3px 12px rgba(0,0,0,0.8);">¿Tienes otra idea o producto en mente?</h2>
+        <p style="color: #e2e8f0; font-size: 1.08rem; max-width: 700px; margin: 0 auto 2.5rem auto; line-height: 1.6; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">
+          ¡Dinos qué necesitas! Si buscas un bocadito especial, una combinación diferente o algo 100% personalizado para tu reunión o celebración, cuéntanos tu idea y armamos una propuesta exclusiva a tu medida.
+        </p>
+        <div style="display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap;">
+          <a href="https://wa.me/56912345678?text=Hola%20Mozzaro,%20tengo%20una%20idea%20o%20producto%20especial%20en%20mente%20para%20un%20pedido%20personalizado" target="_blank" class="btn btn-gold" style="padding: 0.85rem 1.8rem;">
+            <i class="fa-brands fa-whatsapp"></i> Cuéntanos por WhatsApp
+          </a>
+          <a href="#contacto-directo" class="btn btn-outline" style="padding: 0.85rem 1.8rem; border-color: rgba(255,255,255,0.4); color: #ffffff;">
+            <i class="fa-solid fa-paper-plane"></i> Enviar Mensaje
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PROPUESTA DE VALOR / FEATURES
+       ========================================================================== -->
+  <section class="features-section" id="propuesta">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">¿Por qué elegir Mozzaro?</span>
+        <h2 class="section-title">Comida Deliciosa para Compartir sin Complicaciones</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-box-open"></i>
+          </div>
+          <h3 class="feature-title">Listos para Servir</h3>
+          <p class="feature-desc">Te entregamos todo en cajas de presentación listos para abrir y colocar en tu mesa sin preocuparte por preparar nada.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-utensils"></i>
+          </div>
+          <h3 class="feature-title">Fresco del Día</h3>
+          <p class="feature-desc">Elaboramos tus empanaditas, mini hamburguesas, tapaditos y dulces el mismo día de la entrega con insumos seleccionados.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <h3 class="feature-title">Variedad a Elegir</h3>
+          <p class="feature-desc">Elige la cantidad exacta de bocaditos salados, galletas temáticas y bocados dulces según la cantidad de invitados.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-truck-fast"></i>
+          </div>
+          <h3 class="feature-title">Despacho Puntual</h3>
+          <p class="feature-desc">Entregamos directamente en tu domicilio o lugar de reunión a la hora acordada y en óptimas condiciones de temperatura.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECCIÓN ESPECIAL: EDICIÓN FIESTAS PATRIAS (18 DE SEPTIEMBRE)
+       ========================================================================== -->
+  <section class="seasonal-section" id="especial" style="padding: 6.5rem 0 5.5rem 0; background: radial-gradient(circle at 50% 25%, rgba(230, 194, 128, 0.25) 0%, rgba(0, 57, 166, 0.38) 35%, rgba(213, 43, 30, 0.28) 68%, rgba(14, 18, 27, 0.95) 95%), linear-gradient(180deg, #0b0f19 0%, #151b27 100%); position: relative; border-bottom: 2px solid var(--border-gold); overflow: hidden;">
+    
+    <!-- Guirnalda Festiva de Banderines Patrios Ondeantes (Animated Chilean Pennants) -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; overflow: hidden; pointer-events: none; z-index: 2; opacity: 0.9;">
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #0039a6; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 0s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #ffffff; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 0.2s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #d52b1e; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 0.4s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #e6c280; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 0.6s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #0039a6; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 0.8s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #ffffff; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 1s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #d52b1e; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 1.2s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #e6c280; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 1.4s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #0039a6; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 1.6s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #ffffff; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 1.8s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #d52b1e; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 2s;"></div>
+      <div class="pennant-item" style="width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent; border-top: 38px solid #e6c280; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); animation-delay: 2.2s;"></div>
+    </div>
+
+    <!-- Copihues Chilenos Flotantes Ilustrados (Copihues Rojos con Hojas Verdes) -->
+    <div style="position: absolute; top: 8%; left: 3%; pointer-events: none; z-index: 3; animation: floatSlow 4s ease-in-out infinite;">
+      <svg width="60" height="75" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 6px 12px rgba(213, 43, 30, 0.4));">
+        <path d="M50 5 Q48 20 40 30 Q35 35 25 32" stroke="#2b9348" stroke-width="5" stroke-linecap="round"/>
+        <path d="M40 30 Q20 15 15 25 Q25 35 40 30 Z" fill="#2b9348"/>
+        <path d="M40 30 Q60 15 65 25 Q55 35 40 30 Z" fill="#38b000"/>
+        <path d="M35 35 Q50 45 65 35 Q75 60 70 85 Q65 105 50 115 Q35 105 30 85 Q25 60 35 35 Z" fill="url(#copihueGradLeft)"/>
+        <path d="M40 40 Q50 70 45 110 M60 40 Q50 70 55 110" stroke="#800f2f" stroke-width="3"/>
+        <circle cx="45" cy="112" r="3" fill="#e6c280"/>
+        <circle cx="50" cy="116" r="3" fill="#f4a261"/>
+        <circle cx="55" cy="112" r="3" fill="#e6c280"/>
+        <defs>
+          <linearGradient id="copihueGradLeft" x1="50" y1="35" x2="50" y2="115" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ff4d4d"/>
+            <stop offset="60%" stop-color="#d52b1e"/>
+            <stop offset="100%" stop-color="#800f2f"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div style="position: absolute; top: 8%; right: 3%; pointer-events: none; z-index: 3; animation: floatSlow 4s ease-in-out infinite 2s;">
+      <svg width="60" height="75" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 6px 12px rgba(213, 43, 30, 0.4)); transform: scaleX(-1);">
+        <path d="M50 5 Q48 20 40 30 Q35 35 25 32" stroke="#2b9348" stroke-width="5" stroke-linecap="round"/>
+        <path d="M40 30 Q20 15 15 25 Q25 35 40 30 Z" fill="#2b9348"/>
+        <path d="M40 30 Q60 15 65 25 Q55 35 40 30 Z" fill="#38b000"/>
+        <path d="M35 35 Q50 45 65 35 Q75 60 70 85 Q65 105 50 115 Q35 105 30 85 Q25 60 35 35 Z" fill="url(#copihueGradRight)"/>
+        <path d="M40 40 Q50 70 45 110 M60 40 Q50 70 55 110" stroke="#800f2f" stroke-width="3"/>
+        <circle cx="45" cy="112" r="3" fill="#e6c280"/>
+        <circle cx="50" cy="116" r="3" fill="#f4a261"/>
+        <circle cx="55" cy="112" r="3" fill="#e6c280"/>
+        <defs>
+          <linearGradient id="copihueGradRight" x1="50" y1="35" x2="50" y2="115" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ff4d4d"/>
+            <stop offset="60%" stop-color="#d52b1e"/>
+            <stop offset="100%" stop-color="#800f2f"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="container" style="position: relative; z-index: 3;">
+      <div class="section-title-wrapper" style="text-align: center; max-width: 850px; margin: 0 auto 2.5rem auto;">
+        
+        <!-- Emblema de Lujo -->
+        <div style="display: inline-flex; align-items: center; gap: 0.75rem; background: linear-gradient(135deg, rgba(0, 57, 166, 0.25), rgba(213, 43, 30, 0.3)); border: 1.5px solid var(--border-gold); padding: 0.5rem 1.6rem; border-radius: 50px; margin-bottom: 1.25rem; box-shadow: 0 4px 20px rgba(230, 194, 128, 0.25);">
+          <span style="color: var(--primary-gold); font-weight: 800; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;">
+            Edición Fiestas Patrias
+          </span>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+          <!-- Copihue Titular Izquierdo -->
+          <svg width="36" height="48" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 8px rgba(213,43,30,0.6));">
+            <path d="M50 5 Q48 20 40 30 Q35 35 25 32" stroke="#2b9348" stroke-width="5" stroke-linecap="round"/>
+            <path d="M40 30 Q20 15 15 25 Q25 35 40 30 Z" fill="#2b9348"/>
+            <path d="M35 35 Q50 45 65 35 Q75 60 70 85 Q65 105 50 115 Q35 105 30 85 Q25 60 35 35 Z" fill="#d52b1e"/>
+            <circle cx="50" cy="116" r="3" fill="#e6c280"/>
+          </svg>
+
+          <h2 class="section-title" style="font-size: clamp(2rem, 4vw, 2.7rem); margin: 0; text-shadow: 0 4px 15px rgba(0,0,0,0.8);">
+            Especial 18 de Septiembre Mozzaro
+          </h2>
+
+          <!-- Copihue Titular Derecho -->
+          <svg width="36" height="48" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 2px 8px rgba(213,43,30,0.6)); transform: scaleX(-1);">
+            <path d="M50 5 Q48 20 40 30 Q35 35 25 32" stroke="#2b9348" stroke-width="5" stroke-linecap="round"/>
+            <path d="M40 30 Q20 15 15 25 Q25 35 40 30 Z" fill="#2b9348"/>
+            <path d="M35 35 Q50 45 65 35 Q75 60 70 85 Q65 105 50 115 Q35 105 30 85 Q25 60 35 35 Z" fill="#d52b1e"/>
+            <circle cx="50" cy="116" r="3" fill="#e6c280"/>
+          </svg>
+        </div>
+
+        <p class="section-desc" style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; margin-top: 1rem;">
+          ¡Celebra el Dieciocho con la mejor gastronomía tradicional chilena! Cajas aperitivo dieciocheras preparadas frescas con empanaditas de pino jugoso, empanadas de queso, mini sopaipillas crujientes y bocaditos salados.
+        </p>
+      </div>
+
+      <div class="seasonal-panel" id="panelSeptiembre">
+        <!-- Banner Decorativo Gran Fonda Mozzaro con Copihues -->
+        <div style="background: linear-gradient(135deg, rgba(18, 22, 32, 0.92) 0%, rgba(24, 30, 45, 0.95) 100%); border: 1.5px solid var(--border-gold); backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 2.5rem 2rem; margin-bottom: 2.5rem; text-align: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          
+          <!-- Cinta Tricolor de Acento en el Banner -->
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0039a6 33.3%, #ffffff 33.3% 66.6%, #d52b1e 66.6%);"></div>
+
+          <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+            <!-- Copihue Icono Banner Left -->
+            <svg width="24" height="32" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 5 Q48 20 40 30 Q35 35 25 32" stroke="#2b9348" stroke-width="6"/>
+              <path d="M35 35 Q50 45 65 35 Q75 60 70 85 Q65 105 50 115 Q35 105 30 85 Q25 60 35 35 Z" fill="#d52b1e"/>
+            </svg>
+            <span class="badge badge-gold" style="font-size: 0.88rem; padding: 0.4rem 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+              ¡La Comida del 18 Lista en tu Fonda o Empresa!
+            </span>
+            <!-- Copihue Icono Banner Right -->
+            <svg width="24" height="32" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: scaleX(-1);">
+              <path d="M50 5 Q48 20 40 30 Q35 35 25 32" stroke="#2b9348" stroke-width="6"/>
+              <path d="M35 35 Q50 45 65 35 Q75 60 70 85 Q65 105 50 115 Q35 105 30 85 Q25 60 35 35 Z" fill="#d52b1e"/>
+            </svg>
+          </div>
+
+          <h3 style="font-size: 1.75rem; color: var(--text-main); margin-bottom: 0.5rem; font-weight: 800;">
+            Cajas Dieciocheras Listas para Abrir & Servir
+          </h3>
+          <p style="font-size: 1rem; color: var(--text-muted); max-width: 750px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+            Disfruta Fiestas Patrias sin pasar horas cocinando. Te entregamos tus bocaditos en cajas de presentación herméticas que mantienen la temperatura y calidad del primer al último bocado.
+          </p>
+
+          <!-- Badges de Garantía Dieciochera -->
+          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <span style="font-size: 0.85rem; color: #ffffff; font-weight: 700; background: rgba(0, 57, 166, 0.4); border: 1px solid rgba(230, 194, 128, 0.5); padding: 0.4rem 1rem; border-radius: 20px; display: inline-flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-flag text-gold"></i> Receta 100% Tradicional
+            </span>
+            <span style="font-size: 0.85rem; color: #ffffff; font-weight: 700; background: rgba(213, 43, 30, 0.4); border: 1px solid rgba(230, 194, 128, 0.5); padding: 0.4rem 1rem; border-radius: 20px; display: inline-flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-fire text-gold"></i> Horneadas al Día
+            </span>
+            <span style="font-size: 0.85rem; color: #ffffff; font-weight: 700; background: rgba(230, 194, 128, 0.2); border: 1px solid var(--border-gold); padding: 0.4rem 1rem; border-radius: 20px; display: inline-flex; align-items: center; gap: 0.4rem;">
+              <i class="fa-solid fa-truck-fast text-gold"></i> Despacho Directo en Santiago
+            </span>
+          </div>
+        </div>
+
+        <!-- Grilla de Productos Dieciocheros -->
+        <div class="gallery-grid">
+          <!-- Empanadas Pino -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/empanadas_pino.jpeg', 'Empanaditas de Pino Cóctel 18', 'Tradicionales empanaditas de pino jugoso de carne recién horneadas con especias criollas.', '18 de Septiembre')">
+            <img src="assets/empanadas_pino.jpeg" alt="Empanaditas Pino 18" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-flag text-gold"></i> Pino Cóctel 18</span>
+              <h3 class="gallery-title">Empanaditas de Pino Cóctel</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+
+          <!-- Mini Sopaipillas (sin pebre) -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/mini_sopaipillas.jpeg', 'Mini Sopaipillas Dieciocheras (sin pebre)', 'Crujientes mini sopaipillas chilenas doraditas recién preparadas (se entregan sin pebre).', '18 de Septiembre')">
+            <img src="assets/mini_sopaipillas.jpeg" alt="Mini Sopaipillas 18" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-utensils text-gold"></i> Mini Sopaipillas (sin pebre)</span>
+              <h3 class="gallery-title">Mini Sopaipillas Dieciocheras</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+
+          <!-- Empanadas Queso Tradicional 18 -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/empanada_queso_alejada.jpeg', 'Empanada Tradicional de Queso (Tamaño Normal - Grande)', 'Exquisita empanada doradita de queso en tamaño grande/tradicional (no de cóctel), rellena de abundante queso fundido.', '18 de Septiembre')">
+            <img src="assets/empanada_queso_alejada.jpeg" alt="Empanada Tradicional de Queso 18" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-cheese text-gold"></i> Queso Tradicional 18</span>
+              <h3 class="gallery-title">Empanada Tradicional de Queso (Tamaño Normal - Grande)</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECCIÓN EXCLUSIVA: GALLETAS TEMÁTICAS A PEDIDO
+       ========================================================================== -->
+  <section class="galletas-section" id="galletas" style="padding: 5.5rem 0; background: linear-gradient(180deg, var(--bg-main) 0%, rgba(18, 22, 32, 0.85) 100%); position: relative;">
+    <div class="container">
+      <div class="section-title-wrapper" style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">
+        <span class="section-subtitle" style="color: var(--primary-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;"><i class="fa-solid fa-cookie-bite"></i> 100% Personalizadas a tu Gusto</span>
+        <h2 class="section-title" style="font-size: 2.2rem; margin: 0.5rem 0 1rem 0;">Galletas Temáticas para Todo Tipo de Eventos</h2>
+        <p class="section-desc" style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">
+          En Mozzaro preparamos hermosas y deliciosas galletas glaseadas artesanales diseñadas totalmente a la medida. Adaptamos los colores, nombres, formas, números y detalles según la temática exacta de tu celebración.
+        </p>
+      </div>
+
+      <!-- Grid de Temáticas Populares -->
+      <div class="galletas-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        <div class="galleta-card" style="background: var(--bg-card); border: 1px solid var(--border-light); padding: 2.25rem 1.5rem; border-radius: var(--radius-md); text-align: center; transition: all 0.3s ease;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(230, 194, 128, 0.12); color: var(--primary-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto; border: 1px solid var(--border-gold);">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 0.5rem;">Graduaciones & Titulaciones</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Birretes, diplomas, nombres de titulados y símbolos académicos con los colores de tu institución.</p>
+        </div>
+
+        <div class="galleta-card" style="background: var(--bg-card); border: 1px solid var(--border-light); padding: 2.25rem 1.5rem; border-radius: var(--radius-md); text-align: center; transition: all 0.3s ease;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(230, 194, 128, 0.12); color: var(--primary-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto; border: 1px solid var(--border-gold);">
+            <i class="fa-solid fa-cake-candles"></i>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 0.5rem;">Cumpleaños & Fiestas Infantil</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Personajes, números de edad, nombres y paletas de colores temáticas a elección.</p>
+        </div>
+
+        <div class="galleta-card" style="background: var(--bg-card); border: 1px solid var(--border-light); padding: 2.25rem 1.5rem; border-radius: var(--radius-md); text-align: center; transition: all 0.3s ease;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(230, 194, 128, 0.12); color: var(--primary-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto; border: 1px solid var(--border-gold);">
+            <i class="fa-solid fa-baby"></i>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 0.5rem;">Baby Shower & Bautizos</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Detalles delicados: maderitas, ositos, angelitos, cochecitos y tonos pasteles únicos.</p>
+        </div>
+
+        <div class="galleta-card" style="background: var(--bg-card); border: 1px solid var(--border-light); padding: 2.25rem 1.5rem; border-radius: var(--radius-md); text-align: center; transition: all 0.3s ease;">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(230, 194, 128, 0.12); color: var(--primary-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto; border: 1px solid var(--border-gold);">
+            <i class="fa-solid fa-building"></i>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 0.5rem;">Corporativos & Marcas</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">Logos de empresas, lanzamientos de marca, regalos corporativos y aniversarios.</p>
+        </div>
+      </div>
+
+      <!-- Galería Muestrario de Fotos de Galletas Temáticas (Mismo Formato que Gran Portafolio) -->
+      <div style="margin-top: 3.5rem; margin-bottom: 2.5rem;">
+        <h3 style="text-align: center; font-size: 1.5rem; color: var(--text-main); margin-bottom: 1.5rem;">
+          <i class="fa-solid fa-camera text-gold"></i> Muestrario Real de Galletas Temáticas
+        </h3>
+        
+        <div class="gallery-grid">
+          <!-- Galleta Foto 1 -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/galletas_cora.jpeg', 'Galletas Temáticas de Corazón (Amor & Aniversarios)', 'Hermosas galletas glaseadas artesanales con diseño de corazón especial para enamorados, aniversarios y fechas especiales.', 'Galletas Temáticas')">
+            <img src="assets/galletas_cora.jpeg" alt="Galletas Temáticas de Corazón" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-heart"></i> Amor & Aniversarios</span>
+              <h3 class="gallery-title">Galletas Temáticas de Corazón</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+
+          <!-- Galleta Foto 2 -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/galletas_bautizo_2.jpeg', 'Galletas Temáticas de Bautizo & Celebraciones', 'Elegante bandeja de galletas glaseadas en tonos suaves para bautizos y primeras comuniones.', 'Galletas Temáticas')">
+            <img src="assets/galletas_bautizo_2.jpeg" alt="Galletas de Bautizo Elegantes" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-cross"></i> Bautizos & Comunión</span>
+              <h3 class="gallery-title">Galletas de Bautizo Elegantes</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+
+          <!-- Galleta Foto 2B -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/galleta_bautizo.jpeg', 'Galletas Baby Shower & Bautizos', 'Hermosas galletas glaseadas artesanales en tonos pasteles para baby shower y bautizos.', 'Galletas Temáticas')">
+            <img src="assets/galleta_bautizo.jpeg" alt="Galletas Baby Shower & Bautizos" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-baby"></i> Baby Shower & Bautizo</span>
+              <h3 class="gallery-title">Galletas Baby Shower Pastel</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+
+          <!-- Galleta Foto 3: Halloween -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/galletas_halloween.png', 'Galletas Temáticas de Halloween', 'Espeluznantes y divertidas galletas glaseadas artesanales con diseños de calabazas, fantasmas y brujitas.', 'Galletas Temáticas')">
+            <img src="assets/galletas_halloween.png" alt="Galletas Temáticas de Halloween" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-ghost"></i> Halloween & Fiestas</span>
+              <h3 class="gallery-title">Galletas Temáticas de Halloween</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+
+          <!-- Galleta Foto 6: Navidad -->
+          <div class="gallery-item portfolio-card" onclick="openPortfolioLightbox('assets/galletas_navidad.jpeg', 'Galletas Temáticas de Navidad & Fiestas', 'Hermosas galletas glaseadas artesanales con diseños navideños, pinitos, botas y renos.', 'Galletas Temáticas')">
+            <img src="assets/galletas_navidad.jpeg" alt="Galletas de Navidad" class="gallery-img">
+            <div class="gallery-overlay">
+              <span class="gallery-tag"><i class="fa-solid fa-snowflake"></i> Navidad & Fiestas</span>
+              <h3 class="gallery-title">Galletas de Navidad</h3>
+              <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner de Cotización Personalizada de Galletas -->
+      <div class="galletas-cta-banner" style="background: rgba(230, 194, 128, 0.08); border: 1px solid var(--border-gold); border-radius: var(--radius-lg); padding: 2.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;">
+        <div style="max-width: 600px;">
+          <h3 style="font-size: 1.35rem; color: var(--text-main); margin-bottom: 0.5rem;"><i class="fa-solid fa-wand-magic-sparkles text-gold"></i> ¿Tienes una temática especial en mente?</h3>
+          <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">Cuéntanos qué temática necesitas o envíanos una foto o imagen de referencia por WhatsApp y preparamos una propuesta de galletas a tu medida.</p>
+        </div>
+        <a href="https://wa.me/56912345678?text=Hola%20Mozzaro,%20quisiera%20cotizar%20galletas%20tem%C3%A1ticas%20personalizadas%20para%20mi%20evento" target="_blank" class="btn btn-gold" style="white-space: nowrap;">
+          <i class="fa-brands fa-whatsapp"></i> Cotizar Galletas por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       GRAN PORTAFOLIO VISUAL DE PRODUCTOS MOZZARO
+       ========================================================================== -->
+  <section class="gallery-section" id="galeria">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Muestrario Real de Trabajos</span>
+        <h2 class="section-title">Gran Portafolio de Nuestros Bocaditos</h2>
+        <p class="section-desc">Explora la variedad de bocaditos salados y dulces que preparamos y despachamos diariamente para reuniones y celebraciones.</p>
+      </div>
+
+      <!-- Portfolio Filter Tabs -->
+      <div class="portfolio-filter-tabs">
+        <button class="portfolio-tab active" onclick="filterPortfolio('all')">Todos los Productos</button>
+        <button class="portfolio-tab" onclick="filterPortfolio('salados')">Cóctel Salado</button>
+        <button class="portfolio-tab" onclick="filterPortfolio('dulces')">Cóctel Dulce</button>
+      </div>
+
+      <!-- Portfolio Grid Container -->
+      <div class="gallery-grid" id="portfolioGrid">
+        <!-- Item 1: Canapes 1 -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/canape_1.jpeg', 'Canapés Salados Variados (Presentación Cajas)', 'Elegantes canapés preparados frescos el día de la entrega en cajas listos para consumir.', 'Cóctel Salado')">
+          <img src="assets/canape_1.jpeg" alt="Canapés Salados Variados" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-box-open"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Canapés Salados Variados</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 2: Canapes 2 -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/canape_2.jpeg', 'Canapés Salados Especiales de Cóctel', 'Variedad de canapés salados finos en caja de presentación para reuniones y celebraciones.', 'Cóctel Salado')">
+          <img src="assets/canape_2.jpeg" alt="Canapés Salados Finos" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-box"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Canapés Salados Finos</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 3: Empanadas Pino -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/empanadas_pino.jpeg', 'Empanadas de Pino Cóctel', 'Tradicionales mini empanaditas de pino jugoso de carne recién horneadas.', 'Cóctel Salado')">
+          <img src="assets/empanadas_pino.jpeg" alt="Empanadas de Pino Cóctel" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-bread-slice"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Empanadas de Pino Cóctel</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 4: Empanadas Queso -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/empanadas_queso.jpeg', 'Empanadas de Queso Cóctel', 'Mini empanaditas crocantes con abundante queso derretido en su interior.', 'Cóctel Salado')">
+          <img src="assets/empanadas_queso.jpeg" alt="Empanadas de Queso Cóctel" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-cheese"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Empanadas de Queso Cóctel</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 5: Tapaditos -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/tapaditos_pollo.jpeg', 'Tapaditos', 'Suaves bocaditos de pan rellenos de cremosa pasta casera.', 'Cóctel Salado')">
+          <img src="assets/tapaditos_pollo.jpeg" alt="Tapaditos" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-utensils"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Tapaditos</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 6: Mini Burgers -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/mini_hamburguesas.jpeg', 'Mini Hamburguesas Brioche', 'Sabrosas mini hamburguesitas en tierno pan brioche fresco con queso cheddar.', 'Cóctel Salado')">
+          <img src="assets/mini_hamburguesas.jpeg" alt="Mini Hamburguesas" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-burger"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Mini Hamburguesas</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 7: Chaparritas -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/mini_chaparritas.jpeg', 'Mini Chaparritas Horneadas', 'Deliciosas mini chaparritas horneadas rellenas de vienesa jugosa y queso fundido.', 'Cóctel Salado')">
+          <img src="assets/mini_chaparritas.jpeg" alt="Mini Chaparritas" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-hotdog"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Mini Chaparritas</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 8: Sopaipillas -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/mini_sopaipillas.jpeg', 'Mini Sopaipillas Crujientes', 'Tradicionales mini sopaipillas chilenas crujientes y doraditas.', 'Cóctel Salado')">
+          <img src="assets/mini_sopaipillas.jpeg" alt="Mini Sopaipillas" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-cookie-bite"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Mini Sopaipillas</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 9: Mini Pizzas -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/mini_pizzas_coctel.jpeg', 'Mini Pizzas Cóctel', 'Deliciosas mini pizzas horneadas con salsa casera y abundante queso mozzarella fundido.', 'Cóctel Salado')">
+          <img src="assets/mini_pizzas_coctel.jpeg" alt="Mini Pizzas Cóctel" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-pizza-slice"></i> Cóctel Salado</span>
+            <h3 class="gallery-title">Mini Pizzas Cóctel</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 9.5: Brochetitas Caprese -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/brochetitas.jpeg', 'Brochetitas Cóctel Caprese (A pedido)', 'Frescas y deliciosas brochetitas de cóctel preparadas con tomate cherry, albahaca fresca y quesito (disponibles a pedido especial).', 'Cóctel Salado • A pedido')">
+          <img src="assets/brochetitas.jpeg" alt="Brochetitas Cóctel Caprese" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-leaf"></i> Cóctel Salado • A pedido</span>
+            <h3 class="gallery-title">Brochetitas Cóctel Caprese</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 9.6: Croissants Cóctel Rellenos -->
+        <div class="gallery-item portfolio-card" data-category="salados" onclick="openPortfolioLightbox('assets/croissant_coctel.jpeg', 'Croissants Cóctel Rellenos (A pedido)', 'Elegantes mini croissants cóctel rellenos con queso crema y espinaca. Variedades a elección con carpaccio de salmón o jamón serrano (pedido exclusivo a la medida).', 'Cóctel Salado • A pedido')">
+          <img src="assets/croissant_coctel.jpeg" alt="Croissants Cóctel Rellenos" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-bread-slice"></i> Cóctel Salado • A pedido</span>
+            <h3 class="gallery-title">Croissants Cóctel Rellenos</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 10: Cupcakes -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/cupcake_frosting.jpeg', 'Mini Cupcakes Rellenos (Chocolate o Frosting)', 'Esponjosos mini cupcakes caseros rellenos y decorados con suave frosting cremoso.', 'Cóctel Dulce')">
+          <img src="assets/cupcake_frosting.jpeg" alt="Mini Cupcakes Rellenos" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-cake-candles"></i> Cóctel Dulce</span>
+            <h3 class="gallery-title">Mini Cupcakes Rellenos</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 11: Donas -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/mini_donas_tematica.jpeg', 'Mini Donas simples o Temáticas', 'Mini donitas artesanales cubiertas con chocolate o decoradas a pedido según tu temática.', 'Cóctel Dulce')">
+          <img src="assets/mini_donas_tematica.jpeg" alt="Mini Donas Temáticas" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-cookie"></i> Cóctel Dulce</span>
+            <h3 class="gallery-title">Mini Donas simples o Temáticas</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 12: Tartas -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/tarta_fruta.jpeg', 'Mini Tartas de Fruta', 'Crocantes mini tartaletas artesanales con crema pastelera y fruta fresca de estación.', 'Cóctel Dulce')">
+          <img src="assets/tarta_fruta.jpeg" alt="Mini Tartas de Fruta" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-apple-whole"></i> Cóctel Dulce</span>
+            <h3 class="gallery-title">Mini Tartas de Fruta</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 12.5: Mini Pie de Limón Cóctel -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/pie_limon_coctel.jpeg', 'Mini Pie de Limón Cóctel (A pedido)', 'Crocantes mini tartaletas horneadas rellenas de cremosa crema de limón casera y suave merengue dorado (disponibles a pedido especial).', 'Cóctel Dulce • A pedido')">
+          <img src="assets/pie_limon_coctel.jpeg" alt="Mini Pie de Limón Cóctel" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-lemon"></i> Cóctel Dulce • A pedido</span>
+            <h3 class="gallery-title">Mini Pie de Limón Cóctel</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 12.6: Mini Chilenitos Tradicionales -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/chilenitos.jpeg', 'Mini Chilenitos Tradicionales con Manjar (A pedido)', 'Deliciosos mini chilenitos artesanales rellenos de abundante manjar casero y cubiertos con suave merengue dorado (disponibles a pedido especial).', 'Cóctel Dulce • A pedido')">
+          <img src="assets/chilenitos.jpeg" alt="Mini Chilenitos Tradicionales" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-stroopwafel"></i> Cóctel Dulce • A pedido</span>
+            <h3 class="gallery-title">Mini Chilenitos Tradicionales</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 12.7: Mini Merenguitos con Manjar -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/merenguitos.jpeg', 'Mini Merenguitos Rellenos con Manjar (A pedido)', 'Crujientes y delicados mini merenguitos caseros horneados, rellenos con abundante manjar cremoso (disponibles a pedido especial).', 'Cóctel Dulce • A pedido')">
+          <img src="assets/merenguitos.jpeg" alt="Mini Merenguitos con Manjar" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-cloud"></i> Cóctel Dulce • A pedido</span>
+            <h3 class="gallery-title">Mini Merenguitos con Manjar</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 13: Galletas Temáticas Bautizo -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/galleta_bautizo.jpeg', 'Galletas Temáticas Personalizadas', 'Hermosas galletas glaseadas artesanales 100% personalizadas según la temática de tu evento.', 'Cóctel Dulce')">
+          <img src="assets/galleta_bautizo.jpeg" alt="Galletas Temáticas Personalizadas" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-cookie-bite"></i> Cóctel Dulce</span>
+            <h3 class="gallery-title">Galletas Temáticas Personalizadas</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+
+        <!-- Item 14: Galletas Temáticas Corazón -->
+        <div class="gallery-item portfolio-card" data-category="dulces" onclick="openPortfolioLightbox('assets/galletas_cora.jpeg', 'Galletas Temáticas de Corazón', 'Hermosas galletas glaseadas artesanales de corazón para cumpleaños y fechas especiales.', 'Cóctel Dulce')">
+          <img src="assets/galletas_cora.jpeg" alt="Galletas Temáticas de Corazón" class="gallery-img">
+          <div class="gallery-overlay">
+            <span class="gallery-tag"><i class="fa-solid fa-heart"></i> Cóctel Dulce</span>
+            <h3 class="gallery-title">Galletas Temáticas de Corazón</h3>
+            <p style="font-size:0.8rem; color: var(--primary-gold); margin-top:0.3rem;"><i class="fa-solid fa-magnifying-glass-plus"></i> Ver foto ampliada & cotizar</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PREGUNTAS FRECUENTES (FAQ)
+       ========================================================================== -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Preguntas Frecuentes</span>
+        <h2 class="section-title">Todo lo que Necesitas Saber</h2>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>¿Con cuánto tiempo de anticipación debo realizar mi reserva?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            Recomendamos realizar la reserva con al menos 48 a 72 horas de anticipación. Para eventos grandes (más de 50 personas) o matrimonios, sugerimos reservar con 1 a 2 semanas de antelación para asegurar disponibilidad.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>¿Cómo se entregan los bocaditos?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            Todos nuestros bocaditos se entregan en elegantes cajas de presentación de grado alimenticio listos para retirar la tapa y servir.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>¿Cuentan con opciones vegetarianas, veganas o gluten-free?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            ¡Sí! Contamos con cajas de canapés vegetarianos, crostinis de hummus y verduritas asadas para invitados con restricciones alimentarias. Puedes indicarlo al enviar tu cotización por WhatsApp.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>¿Realizan organización de eventos o servicio de garzones?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </button>
+          <div class="faq-answer">
+            <strong>No. En Mozzaro nos dedicamos exclusivamente a elaborar y despachar la comida</strong> (bocaditos salados, galletas temáticas y bocados dulces). Todo se entrega en cajas de presentación listos para abrir y comer. No realizamos organización de eventos, montajes de mesas ni prestamos servicio de garzones.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       COTIZA CON NOSOTROS & CONTACTO DIRECTO
+       ========================================================================== -->
+  <section class="quote-contact-section" id="contacto-directo">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Atención Directa</span>
+        <h2 class="section-title">Cotiza tu Pedido de Comida con Nosotros</h2>
+        <p class="section-desc">¿Tienes dudas sobre cantidades o porciones? Habla directamente con nuestro equipo por WhatsApp o envíanos tu solicitud.</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Option 1: Hablar Directo por WhatsApp -->
+        <div class="contact-direct-card">
+          <div class="direct-card-icon">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <h3 class="direct-card-title">Hablar Directamente</h3>
+          <p class="direct-card-desc">Conéctate en vivo con un asesor de Mozzaro para resolver tus dudas de forma inmediata y personalizar tu pedido.</p>
+          <a href="https://wa.me/56912345678?text=Hola%20Mozzaro,%20quisiera%20cotizar%20un%20servicio%20de%20catering%20para%20mi%20evento." target="_blank" class="btn btn-whatsapp btn-lg" style="margin-bottom: 1.5rem;">
+            <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i> Chatear por WhatsApp
+          </a>
+          <div class="contact-info-list">
+            <div><i class="fa-solid fa-clock text-gold"></i> Horario: Lunes a Sábado de 09:00 a 20:00 hrs</div>
+            <div><i class="fa-solid fa-envelope text-gold"></i> Correo directo: contacto@mozzaro.cl</div>
+            <div><i class="fa-solid fa-phone text-gold"></i> Teléfono: +56 9 1234 5678</div>
+          </div>
+        </div>
+
+        <!-- Option 2: Formulario de Correo / Cotización -->
+        <div class="contact-form-card">
+          <h3 class="form-card-title"><i class="fa-solid fa-paper-plane text-gold"></i> Formulario de Cotización por Correo</h3>
+          <form id="directQuoteForm" onsubmit="handleDirectQuoteSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contactName">Nombre completo *</label>
+                <input type="text" id="contactName" class="form-input" placeholder="Tu nombre" required>
+              </div>
+              <div class="form-group">
+                <label for="contactPhone">Teléfono / WhatsApp *</label>
+                <input type="tel" id="contactPhone" class="form-input" placeholder="+56 9 1234 5678" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contactEmail">Correo electrónico *</label>
+                <input type="email" id="contactEmail" class="form-input" placeholder="tu@correo.com" required>
+              </div>
+              <div class="form-group">
+                <label for="contactEventType">Tipo de Evento</label>
+                <select id="contactEventType" class="form-input">
+                  <option value="Cóctel Social">Cóctel Social</option>
+                  <option value="Evento Corporativo">Evento Corporativo</option>
+                  <option value="Cumpleaños">Cumpleaños</option>
+                  <option value="Matrimonio / Gala">Matrimonio / Gala</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contactGuests">N° Estimado de Invitados</label>
+                <input type="number" id="contactGuests" class="form-input" placeholder="Ej. 30" min="5">
+              </div>
+              <div class="form-group">
+                <label for="contactDate">Fecha tentativa</label>
+                <input type="date" id="contactDate" class="form-input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="contactMessage">Detalles o mensaje adicional</label>
+              <textarea id="contactMessage" class="form-input form-textarea" rows="3" placeholder="Cuéntanos sobre tu evento (ej. ubicación, requerimientos vegetarianos, si necesitas garzones, etc.)"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-gold" style="width: 100%;">
+              <i class="fa-solid fa-paper-plane"></i> Enviar Solicitud de Cotización
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CART DRAWER (OFF-CANVAS)
+       ========================================================================== -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <h2 class="cart-drawer-title">
+        <i class="fa-solid fa-utensils text-gold"></i> Tu Cotización
+      </h2>
+      <button class="cart-close-btn" id="cartCloseBtn" aria-label="Cerrar Carrito">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="cart-drawer-body" id="cartDrawerItems">
+      <!-- Cart Items populated via JS -->
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-total-row">
+        <span>Total Estimado:</span>
+        <span class="text-gold" id="cartTotalPrice">$0</span>
+      </div>
+
+      <div class="cart-form-group">
+        <input type="date" id="cartEventDate" class="cart-input" placeholder="Fecha del evento">
+      </div>
+      <div class="cart-form-group">
+        <input type="text" id="cartGuestCount" class="cart-input" placeholder="Número de Invitados (ej. 30)">
+      </div>
+
+      <button class="btn btn-whatsapp" onclick="sendWhatsAppQuote()" style="width: 100%;">
+        <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i> Enviar Cotización por WhatsApp
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer" id="contacto">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#" class="logo">
+            <img src="assets/logo_mozzaro.jpeg" alt="Mozzaro Logo" class="logo-img">
+            <div class="logo-text">
+              <span class="logo-name">MOZZARO</span>
+              <span class="logo-sub">Catering & Bocaditos</span>
+            </div>
+          </a>
+          <p class="footer-brand-desc">
+            Especialistas en catering gourmet, bocaditos finos y galletas temáticas para transformar tu evento en una celebración inolvidable.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navegación</h4>
+          <ul class="footer-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#cotizador">Calculadora Eventos</a></li>
+            <li><a href="#menu">Carta & Bocaditos</a></li>
+            <li><a href="#galeria">Galería Visual</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Categorías</h4>
+          <ul class="footer-links">
+            <li><a href="#menu">Canapés Salados</a></li>
+            <li><a href="#menu">Bocaditos Salados</a></li>
+            <li><a href="#menu">Bocados Dulces</a></li>
+            <li><a href="#galletas">Galletas Temáticas</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Contacto Rápido</h4>
+          <ul class="footer-links">
+            <li><i class="fa-solid fa-phone text-gold"></i> +56 9 1234 5678</li>
+            <li><i class="fa-solid fa-envelope text-gold"></i> contacto@mozzaro.cl</li>
+            <li><i class="fa-solid fa-location-dot text-gold"></i> Santiago, Chile</li>
+            <li><i class="fa-brands fa-instagram text-gold"></i> @mozzaro.catering</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Mozzaro Catering Gourmet. Todos los derechos reservados. | <a href="#admin" onclick="openAdminWithPIN(event)" style="color: var(--text-muted); opacity: 0.3; font-size: 0.75rem; text-decoration: none;">Gestión Interna</a></div>
+        <div>Diseñado para sorprender en cada bocado ✨</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       PRODUCT DETAIL MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="productModalOverlay"></div>
+  <div class="product-modal" id="productModal">
+    <button class="modal-close-btn" id="modalCloseBtn" aria-label="Cerrar Modal">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal-body" id="modalBody">
+      <!-- Populated via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp Direct Chat Widget -->
+  <a href="https://wa.me/56912345678?text=Hola%20Mozzaro,%20quisiera%20cotizar%20un%20servicio%20de%20catering%20para%20mi%20evento." target="_blank" class="floating-whatsapp-btn" aria-label="Chatear por WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span class="floating-wh-tooltip">Hablar Directo</span>
+  </a>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
+</body>
+</html>

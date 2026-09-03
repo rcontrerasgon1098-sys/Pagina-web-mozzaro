@@ -164,11 +164,31 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`=================================================`);
-  console.log(`🍷 MOZZARO API BACKEND RUNNING ON PORT ${PORT}`);
-  console.log(`👉 App Admin: http://localhost:${PORT}/admin.html`);
-  console.log(`👉 API Endpoint: http://localhost:${PORT}/api/orders`);
-  console.log(`=================================================`);
+// Root route for main website (fixes Vercel Cannot GET /)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+// Fallback for html pages & static files
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  const filePath = path.join(__dirname, req.path);
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    return res.sendFile(filePath);
+  }
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Start Server locally
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`=================================================`);
+    console.log(`🍷 MOZZARO API BACKEND RUNNING ON PORT ${PORT}`);
+    console.log(`👉 App Admin: http://localhost:${PORT}/admin.html`);
+    console.log(`👉 API Endpoint: http://localhost:${PORT}/api/orders`);
+    console.log(`=================================================`);
+  });
+}
+
+// Export for Vercel Serverless Functions
+module.exports = app;

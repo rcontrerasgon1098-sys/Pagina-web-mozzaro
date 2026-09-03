@@ -164,21 +164,44 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
-// Healthcheck & Root Route
-app.get('/api', (req, res) => {
-  res.json({ success: true, message: 'Mozzaro Catering API Backend' });
+// Node.js Express Web Page Routes
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Start Server locally
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/construction', (req, res) => {
+  res.sendFile(path.join(__dirname, 'construction.html'));
+});
+
+app.get('/api', (req, res) => {
+  res.json({ success: true, message: 'Mozzaro Catering Node.js Server Running' });
+});
+
+// Fallback Route handled by Node.js
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) return next();
+  const filePath = path.join(__dirname, req.path);
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    return res.sendFile(filePath);
+  }
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Start Node.js Server locally
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`=================================================`);
-    console.log(`🍷 MOZZARO API BACKEND RUNNING ON PORT ${PORT}`);
+    console.log(`🍷 MOZZARO NODE.JS SERVER RUNNING ON PORT ${PORT}`);
+    console.log(`👉 Web Principal: http://localhost:${PORT}/`);
     console.log(`👉 App Admin: http://localhost:${PORT}/admin.html`);
     console.log(`👉 API Endpoint: http://localhost:${PORT}/api/orders`);
     console.log(`=================================================`);
   });
 }
 
-// Export for Vercel Serverless Functions
+// Export Node.js Express App for Vercel
 module.exports = app;

@@ -387,7 +387,7 @@ function openProductModal(id) {
         </div>
 
         <div class="modal-footer" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem;">
-          <a href="https://wa.me/56912345678?text=${waText}" target="_blank" class="btn btn-gold" onclick="closeProductModal()">
+          <a href="https://wa.me/56961845587?text=${waText}" target="_blank" class="btn btn-gold" onclick="closeProductModal()">
             <i class="fa-brands fa-whatsapp"></i> Cotizar por WhatsApp
           </a>
           <a href="#contacto-directo" class="btn btn-outline" onclick="closeProductModal()">
@@ -519,7 +519,7 @@ function addCalculatorToCart() {
   msg += `• Bocaditos Dulces: ${dulcesCount} unidades\n\n`;
   msg += `¿Me podrían confirmar disponibilidad e instrucciones para coordinar el pedido?`;
 
-  const waUrl = `https://wa.me/56912345678?text=${encodeURIComponent(msg)}`;
+  const waUrl = `https://wa.me/56961845587?text=${encodeURIComponent(msg)}`;
   window.open(waUrl, '_blank');
 }
 
@@ -693,7 +693,7 @@ function sendWhatsAppQuote() {
   // Send Order to Backend API automatically
   sendOrderToBackendAPI({
     clientName: `Cotización Web (${guestCountInput} pers)`,
-    phone: '+56912345678',
+    phone: '+56961845587',
     deliveryDate: eventDate,
     deliveryTime: '18:00',
     details: itemsSummary.join(', '),
@@ -702,7 +702,7 @@ function sendWhatsAppQuote() {
   });
 
   // WhatsApp API URL
-  const phone = '56912345678';
+  const phone = '56961845587';
   const encodedMsg = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${phone}?text=${encodedMsg}`;
 
@@ -762,7 +762,7 @@ function handleDirectQuoteSubmit(e) {
         <button class="btn btn-gold" onclick="closeProductModal()">
           <i class="fa-solid fa-check"></i> Entendido
         </button>
-        <a href="https://wa.me/56912345678?text=Hola%20Mozzaro,%20acabo%20de%20enviar%20una%20solicitud%20de%20cotizaci%C3%B3n%20a%20nombre%20de%20${encodeURIComponent(name)}" target="_blank" class="btn btn-whatsapp" onclick="closeProductModal()">
+        <a href="https://wa.me/56961845587?text=Hola%20Mozzaro,%20acabo%20de%20enviar%20una%20solicitud%20de%20cotizaci%C3%B3n%20a%20nombre%20de%20${encodeURIComponent(name)}" target="_blank" class="btn btn-whatsapp" onclick="closeProductModal()">
           <i class="fa-brands fa-whatsapp"></i> Confirmar por WhatsApp
         </a>
       </div>
@@ -1176,7 +1176,7 @@ function openPortfolioLightbox(imgSrc, title, desc, tag) {
         </div>
 
         <div class="modal-footer" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.5rem;">
-          <a href="https://wa.me/56912345678?text=${waText}" target="_blank" class="btn btn-whatsapp" onclick="closeProductModal()">
+          <a href="https://wa.me/56961845587?text=${waText}" target="_blank" class="btn btn-whatsapp" onclick="closeProductModal()">
             <i class="fa-brands fa-whatsapp"></i> Cotizar este Producto por WhatsApp
           </a>
           <button class="btn btn-outline" onclick="closeProductModal()">Cerrar</button>

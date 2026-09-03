@@ -432,7 +432,7 @@ function dispatchTestNotification() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       clientName: 'Cliente Prueba iPhone 📲',
-      phone: '+56912345678',
+      phone: '+56961845587',
       deliveryDate: todayStr,
       deliveryTime: nowTime,
       details: '2x Empanadas de Queso (50 u), 1x Empanadas de Pino (100 u)',

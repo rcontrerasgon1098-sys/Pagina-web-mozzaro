@@ -164,19 +164,9 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
-// Root route for main website (fixes Vercel Cannot GET /)
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Fallback for html pages & static files
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) return next();
-  const filePath = path.join(__dirname, req.path);
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    return res.sendFile(filePath);
-  }
-  res.sendFile(path.join(__dirname, 'index.html'));
+// Healthcheck & Root Route
+app.get('/api', (req, res) => {
+  res.json({ success: true, message: 'Mozzaro Catering API Backend' });
 });
 
 // Start Server locally
